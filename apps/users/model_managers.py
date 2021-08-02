@@ -17,13 +17,13 @@ class CustomerUserManager(BaseUserManager):
         """Create and save a user with email and password"""
 
         if not username:
-            raise ValidationError(_("Users must have a username"))
+            raise ValueError(_("Users must have a username"))
 
         if email:
             email = self.normalize_email(email)
             self.email_validator(email)
         else:
-            raise ValidationError(_("User Account: An email address is required"))
+            raise ValueError(_("User Account: An email address is required"))
 
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
@@ -50,7 +50,7 @@ class CustomerUserManager(BaseUserManager):
             email = self.normalize_email(email)
             self.email_validator(email)
         else:
-            raise ValidationError(_("Superuser Account: An email address is required"))
+            raise ValueError(_("Superuser Account: An email address is required"))
 
         user = self.create_user(username, email, password, **extra_fields)
         user.save(using=self._db)

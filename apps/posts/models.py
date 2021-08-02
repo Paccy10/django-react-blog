@@ -1,10 +1,9 @@
-import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from autoslug import AutoSlugField
 
 from blog.settings.base import AUTH_USER_MODEL
-from apps.common.models import TimeStampModel
+from apps.common.models import TimeStampModel, UUIDModel
 
 
 class PostPublishedManager(models.Manager):
@@ -16,10 +15,7 @@ class PostPublishedManager(models.Manager):
         )
 
 
-class Post(TimeStampModel):
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, unique=True, blank=False, editable=False
-    )
+class Post(UUIDModel, TimeStampModel):
     author = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(_("Title"), max_length=255)
     slug = AutoSlugField(populate_from="title", always_update=True, unique=True)

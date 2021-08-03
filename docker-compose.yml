@@ -8,8 +8,8 @@ services:
         command: /start
         volumes: 
             - .:/app
-        ports: 
-            - 8000:8000
+        # ports: 
+        #     - 8000:8000
         env_file: 
             - .env
         depends_on: 
@@ -29,6 +29,18 @@ services:
             - POSTGRES_DB=${POSTGRES_DB}
         networks: 
             - blog-api
+
+    nginx:
+        restart: always
+        depends_on: 
+            - api
+        build: 
+            context: ./docker/local/nginx
+            dockerfile: Dockerfile
+        ports: 
+            - 8000:80
+        networks: 
+            - blog-api                
 
 networks: 
     blog-api:
